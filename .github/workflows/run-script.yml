@@ -2,7 +2,7 @@ name: Run Email to Telegram Script
 
 on:
   schedule:
-    - cron: "*/10 * * * *"  # setiap 10 menit
+    - cron: "*/30 * * * *"  # setiap 30 menit
   workflow_dispatch:  # bisa manual run
 
 jobs:

@@ -107,9 +107,19 @@ def check_email_and_send_inline_images():
                 subject = msg.get("Subject", "(No Subject)").strip()
                 date = msg.get("Date")
                 try:
-                    parsed_date = parsedate_to_datetime(date).astimezone()
+                    parsed_date = parsedate_to_datetime(date)
+
+                    # kalau timezone kosong, anggap UTC
+                    if parsed_date.tzinfo is None:
+                        parsed_date = parsed_date.replace(tzinfo=timezone.utc)
+
+                    # konversi eksplisit ke WIB
+                    jakarta_tz = pytz.timezone("Asia/Jakarta")
+                    parsed_date = parsed_date.astimezone(jakarta_tz)
+
                     date_str = parsed_date.strftime("%d %b %Y %H:%M")
-                except:
+                except Exception as e:
+                    print(f"Error parsing date: {e}")
                     date_str = date or "(Unknown Time)"
 
                 message_text = f"<b>Subject:</b> {subject}\n<b>Waktu:</b> {date_str}"
